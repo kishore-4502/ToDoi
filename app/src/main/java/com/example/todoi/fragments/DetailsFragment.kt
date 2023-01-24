@@ -52,20 +52,21 @@ class DetailsFragment : Fragment() {
         val dropDownAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_item,priorityList)
         binding.priorityVal.setAdapter(dropDownAdapter)
 
+        val calendar =Calendar.getInstance()
 
         //If id>0 --> Edit page
         if(id > 0){
-            val now =Calendar.getInstance()
             binding.dateButton.setOnClickListener {
                 val datePicker = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
                     val actualMonth = month+1
                     item.date="$year-$actualMonth-$dayOfMonth"
                     binding.dateShow.text = item.date
                 },
-                    now.get(Calendar.YEAR),
-                    now.get(Calendar.MONTH),
-                    now.get(Calendar.DAY_OF_MONTH)
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
                 )
+                datePicker.datePicker.minDate = calendar.timeInMillis
                 datePicker.show()
             }
             binding.timeButton.setOnClickListener {
@@ -84,8 +85,8 @@ class DetailsFragment : Fragment() {
                         }
                         binding.timeShow.text = item.time
                     },
-                    now.get(Calendar.HOUR),
-                    now.get(Calendar.MINUTE),
+                    calendar.get(Calendar.HOUR),
+                    calendar.get(Calendar.MINUTE),
                     true
                 )
                 timePickerDialog.show()
@@ -161,14 +162,14 @@ class DetailsFragment : Fragment() {
             viewModel.time.observe(viewLifecycleOwner){
                 binding.timeShow.text = it
             }
-            val now =Calendar.getInstance()
             binding.dateButton.setOnClickListener {
                 val datePicker = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
                     val actualMonth = month+1
                     viewModel.date.value = "$year-$actualMonth-$dayOfMonth"
                 },
-                    now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH)
+                    calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)
                 )
+                datePicker.datePicker.minDate = calendar.timeInMillis
                 datePicker.show()
             }
             binding.timeButton.setOnClickListener {
@@ -186,8 +187,8 @@ class DetailsFragment : Fragment() {
                             viewModel.time.value = "$hour-$min"
                         }
                     },
-                    now.get(Calendar.HOUR),
-                    now.get(Calendar.MINUTE),
+                    calendar.get(Calendar.HOUR),
+                    calendar.get(Calendar.MINUTE),
                     true
                 )
                 timePickerDialog.show()
