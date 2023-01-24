@@ -69,28 +69,6 @@ class DetailsFragment : Fragment() {
                 datePicker.datePicker.minDate = calendar.timeInMillis
                 datePicker.show()
             }
-//            binding.timeButton.setOnClickListener {
-//                val timePickerDialog = TimePickerDialog(requireContext(),
-//                    { _, hour, min ->
-//                        if(hour<10 && min<10){
-//                            item.time = "0$hour-0$min"
-//                        }
-//                        else if(hour<10){
-//                            item.time = "0$hour-$min"
-//                        }
-//                        else if(min<10){
-//                            item.time = "$hour-0$min"
-//                        }else{
-//                            item.time = "$hour-$min"
-//                        }
-//                        binding.timeShow.text = item.time
-//                    },
-//                    calendar.get(Calendar.HOUR),
-//                    calendar.get(Calendar.MINUTE),
-//                    true
-//                )
-//                timePickerDialog.show()
-//            }
             binding.addButton.text = buttonName
             binding.deleteButton.visibility = View.VISIBLE
             binding.addToCalendarButton.visibility = View.VISIBLE
@@ -100,7 +78,6 @@ class DetailsFragment : Fragment() {
                     inpMsg.setText(item.msg,TextView.BufferType.SPANNABLE)
                     inpDetails.setText(item.details,TextView.BufferType.SPANNABLE)
                     dateShow.setText(item.date, TextView.BufferType.SPANNABLE)
-//                    timeShow.setText(item.time, TextView.BufferType.SPANNABLE)
 
                     addButton.setOnClickListener {
                         val msg = binding.inpMsg.text.toString()
@@ -127,14 +104,10 @@ class DetailsFragment : Fragment() {
                     }
                     addToCalendarButton.setOnClickListener {
                         val dateString = binding.dateShow.text.toString()
-//                        val timeString = binding.timeShow.text.toString()
                         val dateList = dateString.split("-")
-//                        val timeList = timeString.split("-")
                         val year = dateList[0].toIntOrNull()
                         val month = ((dateList[1]).toIntOrNull())?.minus(1)
                         val date = dateList[2].toIntOrNull()
-//                        val hour = timeList[0].toIntOrNull()
-//                        val min = timeList[1].toIntOrNull()
 
                         if(year!=null && month!=null && date!=null ){
                             val beginTime = Calendar.getInstance()
@@ -161,9 +134,6 @@ class DetailsFragment : Fragment() {
             viewModel.date.observe(viewLifecycleOwner){
                 binding.dateShow.text = it
             }
-//            viewModel.time.observe(viewLifecycleOwner){
-//                binding.timeShow.text = it
-//            }
             binding.dateButton.setOnClickListener {
                 val datePicker = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
                     val actualMonth = month+1
@@ -174,27 +144,6 @@ class DetailsFragment : Fragment() {
                 datePicker.datePicker.minDate = calendar.timeInMillis
                 datePicker.show()
             }
-//            binding.timeButton.setOnClickListener {
-//                val timePickerDialog = TimePickerDialog(requireContext(),
-//                    { _, hour, min ->
-//                        if(hour<10 && min<10){
-//                            viewModel.time.value = "0$hour-0$min"
-//                        }
-//                        else if(hour<10){
-//                            viewModel.time.value = "0$hour-$min"
-//                        }
-//                        else if(min<10){
-//                            viewModel.time.value = "$hour-0$min"
-//                        }else{
-//                            viewModel.time.value = "$hour-$min"
-//                        }
-//                    },
-//                    calendar.get(Calendar.HOUR),
-//                    calendar.get(Calendar.MINUTE),
-//                    true
-//                )
-//                timePickerDialog.show()
-//            }
             binding.addButton.setOnClickListener{
                 val msg = binding.inpMsg.text.toString()
                 val details = binding.inpDetails.text.toString()
