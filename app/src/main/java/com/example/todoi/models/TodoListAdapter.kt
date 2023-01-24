@@ -11,29 +11,24 @@ import com.example.todoi.databinding.TodoStructureBinding
 
 
 
-class TodoListAdapter(private var viewModelStoreOwner: ViewModelStoreOwner,
-                      private val factory: ViewModelProvider.Factory, private val onItemClicked: (Todo) -> Unit)
+class TodoListAdapter(private val onItemClicked: (Todo) -> Unit,private val onCheckBoxClicked:(Todo)->Unit)
     :ListAdapter<Todo,TodoListAdapter.TodoListViewHolder>(DiffCallback){
 
-    class TodoListViewHolder(private var binding:TodoStructureBinding,private val viewModel:TodoViewModel):
+    class TodoListViewHolder(private var binding:TodoStructureBinding):
     RecyclerView.ViewHolder(binding.root)
     {
+        val checkBox = binding.checkbox
         fun bind(item:Todo){
             binding.textView.text = item.msg
             binding.checkbox.isChecked = item.isFinished
             binding.priority.text = "Priority : "+ item.priority
-            binding.checkbox.setOnClickListener{
-                item.isFinished = !item.isFinished
-                viewModel.updateItem(item.id,item.msg,item.date,item.time,item.isFinished,item.priority)
-            }
         }
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoListViewHolder {
         val view = TodoStructureBinding.inflate(LayoutInflater.from(parent.context))
-        val viewModel = ViewModelProvider(viewModelStoreOwner, factory).get(TodoViewModel::class.java)
-        return TodoListViewHolder(view,viewModel)
+        return TodoListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TodoListViewHolder, position: Int) {
@@ -42,17 +37,20 @@ class TodoListAdapter(private var viewModelStoreOwner: ViewModelStoreOwner,
             .setOnClickListener {
                 onItemClicked(current)
             }
+        holder.checkBox.setOnClickListener {
+            onCheckBoxClicked(current)
+        }
         holder.bind(current)
     }
 
     companion object{
         private val DiffCallback = object : DiffUtil.ItemCallback<Todo>() {
             override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-                return oldItem === newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-                return oldItem.msg == newItem.msg
+                return oldItem == newItem
             }
         }
     }

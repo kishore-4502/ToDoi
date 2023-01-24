@@ -31,11 +31,7 @@ class DetailsFragment : Fragment() {
 
     private val navigationArgs:DetailsFragmentArgs by navArgs()
     lateinit var item: Todo
-    private val viewModel: TodoViewModel by activityViewModels {
-        TodoViewModelFactory(
-            (activity?.application as TodoApplication).database.todoDao()
-        )
-    }
+    private val viewModel: TodoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +71,13 @@ class DetailsFragment : Fragment() {
             binding.timeButton.setOnClickListener {
                 val timePickerDialog = TimePickerDialog(requireContext(),
                     { _, hour, min ->
-                        if(min<10){
+                        if(hour<10 && min<10){
+                            item.time = "0$hour-0$min"
+                        }
+                        else if(hour<10){
+                            item.time = "0$hour-$min"
+                        }
+                        else if(min<10){
                             item.time = "$hour-0$min"
                         }else{
                             item.time = "$hour-$min"
@@ -107,7 +109,7 @@ class DetailsFragment : Fragment() {
                             "Medium" ->Priority.MEDIUM
                             else -> Priority.LOW
                         }
-                        if(msg!="" && item.date!="" && item.time!=""){
+                        if(msg!="" && item.date!="Pick a Date" && item.time!="Pick a Time"){
                             if(priorityText=="Priority"){
                                 viewModel.updateItem(navigationArgs.id,msg,item.date,item.time,item.isFinished,item.priority)
                             }else{
@@ -141,6 +143,7 @@ class DetailsFragment : Fragment() {
                                 .putExtra(CalendarContract.Events.TITLE,binding.inpMsg.text.toString() )
                                 .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false)
                                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,startMillis)
+                                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME,startMillis)
 
                             startActivity(insertCalendarIntent)
                         }else{
@@ -171,7 +174,13 @@ class DetailsFragment : Fragment() {
             binding.timeButton.setOnClickListener {
                 val timePickerDialog = TimePickerDialog(requireContext(),
                     { _, hour, min ->
-                        if(min<10){
+                        if(hour<10 && min<10){
+                            viewModel.time.value = "0$hour-0$min"
+                        }
+                        else if(hour<10){
+                            viewModel.time.value = "0$hour-$min"
+                        }
+                        else if(min<10){
                             viewModel.time.value = "$hour-0$min"
                         }else{
                             viewModel.time.value = "$hour-$min"
@@ -191,8 +200,9 @@ class DetailsFragment : Fragment() {
                     "Medium" ->Priority.MEDIUM
                     else -> Priority.LOW
                 }
-                if(msg!="" && viewModel.date.value!="" && viewModel.time.value!="" && priorityText!="Priority"){
+                if(msg!="" && viewModel.date.value!="Pick a Date" && viewModel.time.value!="Pick a Time" && priorityText!="Priority"){
                     viewModel.addTodo(viewModel.getTodo(msg,viewModel.date.value!!,viewModel.time.value!!,priority))
+                    viewModel.resetDateAndTime()
                     findNavController().navigateUp()
                 }else{
                     Toast.makeText(requireContext(),"Fill all fields",Toast.LENGTH_SHORT).show()

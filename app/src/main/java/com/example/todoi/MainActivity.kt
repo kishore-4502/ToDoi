@@ -10,6 +10,8 @@ import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 lateinit var navController:NavController
 
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

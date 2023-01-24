@@ -8,10 +8,14 @@ import kotlinx.coroutines.launch
 
 class TodoViewModel(private val todoDao:TodoDao):ViewModel() {
 
-    val allTodos:LiveData<List<Todo>> = todoDao.getItems().asLiveData()
+    val allTodos:LiveData<MutableList<Todo>> = todoDao.getItems().asLiveData()
+    val date=MutableLiveData("Pick a Date")
+    val time=MutableLiveData("Pick a Time")
 
-    val date=MutableLiveData("")
-    val time=MutableLiveData("")
+    fun resetDateAndTime(){
+        date.value = "Pick a Date"
+        time.value = "Pick a Time"
+    }
 
     fun getTodo(msg:String,date:String,time:String,priority: Priority):Todo{
         return Todo(msg=msg, isFinished = false, date = date, time = time, priority = priority)
@@ -19,6 +23,7 @@ class TodoViewModel(private val todoDao:TodoDao):ViewModel() {
 
     fun addTodo(todo:Todo){
         viewModelScope.launch {
+            allTodos.value?.add(todo)
             todoDao.insert(todo)
         }
     }
@@ -37,6 +42,7 @@ class TodoViewModel(private val todoDao:TodoDao):ViewModel() {
 
     fun deleteItem(item:Todo){
         viewModelScope.launch {
+            allTodos.value?.remove(item)
             todoDao.delete(item)
         }
     }

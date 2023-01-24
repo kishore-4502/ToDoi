@@ -12,7 +12,7 @@ abstract class SwipeToDeleteCallBack:ItemTouchHelper.Callback() {
         return makeMovementFlags(0,flag)
     }
 
-    override fun onMove(
+    override fun onMove( 
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder

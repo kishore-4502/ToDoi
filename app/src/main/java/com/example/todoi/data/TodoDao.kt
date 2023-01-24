@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface TodoDao {
 
     @Query("SELECT * from todo")
-    fun getItems(): Flow<List<Todo>>
+    fun getItems(): Flow<MutableList<Todo>>
 
 
     @Query("SELECT * from todo WHERE msg LIKE :text")

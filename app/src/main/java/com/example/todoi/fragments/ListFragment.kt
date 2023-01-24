@@ -78,10 +78,14 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = TodoListAdapter(this,TodoViewModelFactory((activity?.application as TodoApplication).database.todoDao())){
+        adapter = TodoListAdapter({
             val action = ListFragmentDirections.actionListFragmentToDetailsFragment(it.id,"Edit Todo","Edit")
             findNavController().navigate(action)
-        }
+        },
+            {
+                it.isFinished = !it.isFinished
+                viewModel.updateItem(it.id,it.msg,it.date,it.time,it.isFinished,it.priority)
+        })
         binding.recyclerView.layoutManager=LinearLayoutManager(this.context)
         binding.recyclerView.adapter = adapter
         viewModel.allTodos.observe(viewLifecycleOwner){items ->
@@ -97,11 +101,10 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
 
         val swipeToDeleteCallBack = object : SwipeToDeleteCallBack(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.layoutPosition
                 val item = viewModel.allTodos.value?.get(position)
-                if (item != null) {
-                    viewModel.deleteItem(item)
-                }
+                viewModel.deleteItem(item!!)
+                adapter.notifyItemRemoved(position)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallBack)
