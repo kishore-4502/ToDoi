@@ -27,6 +27,24 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/msg">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inp_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Details"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
     <TextView
         android:id="@+id/date_show"
         android:layout_width="wrap_content"
@@ -45,7 +63,7 @@
         android:text="Pick Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/date_show"
-        app:layout_constraintTop_toBottomOf="@id/msg" />
+        app:layout_constraintTop_toBottomOf="@id/details" />
     <TextView
         android:id="@+id/time_show"
         android:layout_width="wrap_content"

@@ -98,11 +98,13 @@ class DetailsFragment : Fragment() {
                 item = it
                 binding.apply {
                     inpMsg.setText(item.msg,TextView.BufferType.SPANNABLE)
+                    inpDetails.setText(item.details,TextView.BufferType.SPANNABLE)
                     dateShow.setText(item.date, TextView.BufferType.SPANNABLE)
                     timeShow.setText(item.time, TextView.BufferType.SPANNABLE)
 
                     addButton.setOnClickListener {
                         val msg = binding.inpMsg.text.toString()
+                        val details = binding.inpDetails.text.toString()
                         val priorityText=binding.priorityVal.text.toString()
                         Log.d("TAG",priorityText)
                         val priority:Priority = when(priorityText){
@@ -110,11 +112,11 @@ class DetailsFragment : Fragment() {
                             "Medium" ->Priority.MEDIUM
                             else -> Priority.LOW
                         }
-                        if(msg!="" && item.date!="Pick a Date" && item.time!="Pick a Time"){
+                        if(msg!="" && item.date!="Pick a Date" && item.time!="Pick a Time" && details!=""){
                             if(priorityText=="Priority"){
-                                viewModel.updateItem(navigationArgs.id,msg,item.date,item.time,item.isFinished,item.priority)
+                                viewModel.updateItem(navigationArgs.id,msg,item.date,item.time,item.isFinished,item.priority,details)
                             }else{
-                                viewModel.updateItem(navigationArgs.id,msg,item.date,item.time,item.isFinished,priority)
+                                viewModel.updateItem(navigationArgs.id,msg,item.date,item.time,item.isFinished,priority,details)
                             }
                             findNavController().navigateUp()
                         }
@@ -195,17 +197,24 @@ class DetailsFragment : Fragment() {
             }
             binding.addButton.setOnClickListener{
                 val msg = binding.inpMsg.text.toString()
+                val details = binding.inpDetails.text.toString()
                 val priorityText=binding.priorityVal.text.toString()
                 val priority:Priority = when(priorityText){
                     "High" ->Priority.HIGH
                     "Medium" ->Priority.MEDIUM
                     else -> Priority.LOW
                 }
-                if(msg!="" && viewModel.date.value!="Pick a Date" && viewModel.time.value!="Pick a Time" && priorityText!="Priority"){
-                    viewModel.addTodo(viewModel.getTodo(msg,viewModel.date.value!!,viewModel.time.value!!,priority))
+                if(msg!="" && viewModel.date.value!="Pick a Date"
+                    && viewModel.time.value!="Pick a Time"
+                    && priorityText!="Priority"
+                    && details!=""
+                   )
+                {
+                    viewModel.addTodo(viewModel.getTodo(msg,viewModel.date.value!!,viewModel.time.value!!,priority,details))
                     viewModel.resetDateAndTime()
                     findNavController().navigateUp()
-                }else{
+                }
+                else{
                     Toast.makeText(requireContext(),"Fill all fields",Toast.LENGTH_SHORT).show()
                 }
             }

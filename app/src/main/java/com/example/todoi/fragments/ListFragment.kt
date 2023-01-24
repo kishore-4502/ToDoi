@@ -84,7 +84,7 @@ class ListFragment : Fragment(),SearchView.OnQueryTextListener {
         },
             {
                 it.isFinished = !it.isFinished
-                viewModel.updateItem(it.id,it.msg,it.date,it.time,it.isFinished,it.priority)
+                viewModel.updateItem(it.id,it.msg,it.date,it.time,it.isFinished,it.priority, details = it.details)
         })
         binding.recyclerView.layoutManager=LinearLayoutManager(this.context)
         binding.recyclerView.adapter = adapter

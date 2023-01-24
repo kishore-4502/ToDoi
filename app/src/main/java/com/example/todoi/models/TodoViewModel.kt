@@ -17,8 +17,8 @@ class TodoViewModel(private val todoDao:TodoDao):ViewModel() {
         time.value = "Pick a Time"
     }
 
-    fun getTodo(msg:String,date:String,time:String,priority: Priority):Todo{
-        return Todo(msg=msg, isFinished = false, date = date, time = time, priority = priority)
+    fun getTodo(msg:String,date:String,time:String,priority: Priority,details:String):Todo{
+        return Todo(msg=msg, isFinished = false, date = date, time = time, priority = priority, details = details)
     }
 
     fun addTodo(todo:Todo){
@@ -33,8 +33,8 @@ class TodoViewModel(private val todoDao:TodoDao):ViewModel() {
     }
 
 
-    fun updateItem(id:Int,msg:String,date:String,time: String,isFinished:Boolean,priority: Priority){
-        val item = Todo(id=id,msg = msg, date = date, time = time, isFinished = isFinished, priority = priority)
+    fun updateItem(id:Int,msg:String,date:String,time: String,isFinished:Boolean,priority: Priority,details: String){
+        val item = Todo(id=id,msg = msg, date = date, time = time, isFinished = isFinished, priority = priority, details = details)
         viewModelScope.launch {
             todoDao.update(item)
         }

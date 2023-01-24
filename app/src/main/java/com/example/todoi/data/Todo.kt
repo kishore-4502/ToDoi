@@ -1,5 +1,6 @@
 package com.example.todoi.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.todoi.utils.Priority
@@ -13,5 +14,8 @@ data class Todo(
     var isFinished:Boolean,
     var date:String,
     var time:String,
-    val priority:Priority
+    val priority:Priority,
+
+    @ColumnInfo(name = "details", defaultValue = "Details about the todo")
+    val details:String
 )
