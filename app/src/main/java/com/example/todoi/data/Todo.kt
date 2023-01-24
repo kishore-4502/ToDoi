@@ -13,7 +13,6 @@ data class Todo(
     val msg:String,
     var isFinished:Boolean,
     var date:String,
-    var time:String,
     val priority:Priority,
 
     @ColumnInfo(name = "details", defaultValue = "Details about the todo")

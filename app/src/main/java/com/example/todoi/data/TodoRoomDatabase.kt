@@ -1,18 +1,20 @@
 package com.example.todoi.data
 
 import android.content.Context
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 
 @Database(entities = [Todo::class],
-    version = 2,
+    version = 3,
     autoMigrations = [
-        AutoMigration(from = 1, to =   2)
+        AutoMigration(from = 1, to =   2),
+        AutoMigration(from = 2, to =   3, spec = TodoRoomDatabase.Migration2to3::class),
     ]
     )
 abstract class TodoRoomDatabase : RoomDatabase() {
+
+    @DeleteColumn(tableName = "Todo", columnName = "time")
+    class Migration2to3:AutoMigrationSpec
 
     abstract fun todoDao(): TodoDao
     companion object {
@@ -33,4 +35,6 @@ abstract class TodoRoomDatabase : RoomDatabase() {
             }
         }
     }
+
+
 }
